@@ -75,7 +75,11 @@ const sortedPosts = posts.sort((a, b) => new Date(b.data.date).getTime() - new D
 		height: 100vh;
 		padding: 2rem 1.5rem 0;
 		background-color: var(--bg-sidebar);
-		border-right: 2px dashed var(--border);
+		border-right: none;
+		background-image: linear-gradient(to bottom, color-mix(in srgb, var(--border), black 10%) 50%, transparent 50%);
+		background-size: 2px 16px;
+		background-repeat: repeat-y;
+		background-position: right;
 		position: fixed;
 		top: 0;
 		left: 0;
