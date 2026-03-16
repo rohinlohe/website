@@ -3,6 +3,7 @@ import { getCollection, render } from 'astro:content';
 import Layout from '../../layouts/Layout.astro';
 import ThemeToggle from '../../components/ThemeToggle.astro';
 import Sidebar from '../../components/Sidebar.astro';
+import SubscribeBar from '../../components/SubscribeBar.astro';
 
 export async function getStaticPaths() {
 	const posts = await getCollection('posts');
@@ -32,17 +33,19 @@ const { Content } = await render(post);
 			</article>
 		</div>
 	</div>
+	<SubscribeBar />
 </Layout>
 
 <style>
 	.page-layout {
 		display: flex;
-		min-height: 100vh;
+		min-height: calc(100vh - 3rem);
 	}
 
 	.content-area {
 		flex: 1;
 		margin-left: 260px;
+		padding-bottom: 3rem;
 	}
 
 	.post {

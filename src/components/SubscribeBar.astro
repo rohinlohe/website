@@ -1,0 +1,23 @@
+---
+---
+
+<div class="subscribe-bar"></div>
+
+<style>
+	.subscribe-bar {
+		position: fixed;
+		bottom: 0;
+		left: 0;
+		right: 0;
+		z-index: 102;
+		border-top: 1px dashed var(--border);
+		height: 3rem;
+		pointer-events: none;
+	}
+
+	@media (max-width: 768px) {
+		.subscribe-bar {
+			left: 0;
+		}
+	}
+</style>

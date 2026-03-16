@@ -11,41 +11,193 @@ const sortedPosts = posts.sort((a, b) => new Date(b.data.date).getTime() - new D
 ---
 
 <aside class="sidebar">
-	<div class="sidebar-header">
-		<a href="/" class="site-title">Rohin Garg</a>
+	<div class="sidebar-top">
+		<div class="sidebar-header">
+			<a href="/" class="site-title">Rohin Lohe</a>
+		</div>
+		<nav class="feed">
+			<ul>
+				{sortedPosts.map((post) => (
+					<li>
+						<a href={`/posts/${post.id}`} class:list={[{ active: post.id === currentSlug }]}>
+							<span class="entry-title">{post.data.title}</span>
+							<span class="entry-date">{new Date(post.data.date).toLocaleDateString('en-US', { year: 'numeric', month: 'short' })}</span>
+						</a>
+					</li>
+				))}
+			</ul>
+		</nav>
 	</div>
-	<nav class="feed">
-		<ul>
-			{sortedPosts.map((post) => (
-				<li>
-					<a href={`/posts/${post.id}`} class:list={[{ active: post.id === currentSlug }]}>
-						<span class="entry-title">{post.data.title}</span>
-						<span class="entry-date">{new Date(post.data.date).toLocaleDateString('en-US', { year: 'numeric', month: 'short' })}</span>
-					</a>
-				</li>
-			))}
-		</ul>
-	</nav>
+	<div class="sidebar-bottom">
+		<button class="subscribe-btn" id="subscribe-toggle">Subscribe</button>
+		<form class="subscribe-form" id="subscribe-form">
+			<input type="email" placeholder="your email" required id="subscribe-email" />
+			<div class="subscribe-actions">
+				<button type="submit" class="subscribe-submit">Go</button>
+				<button type="button" class="subscribe-cancel" id="subscribe-cancel">&times;</button>
+			</div>
+		</form>
+	</div>
 </aside>
+
+<script>
+	const toggle = document.getElementById('subscribe-toggle')!;
+	const form = document.getElementById('subscribe-form')!;
+	const cancel = document.getElementById('subscribe-cancel')!;
+	const emailInput = document.getElementById('subscribe-email')! as HTMLInputElement;
+
+	toggle.addEventListener('click', () => {
+		toggle.style.display = 'none';
+		form.style.display = 'flex';
+		emailInput.focus();
+	});
+
+	cancel.addEventListener('click', () => {
+		form.style.display = 'none';
+		toggle.style.display = 'inline-block';
+	});
+
+	form.addEventListener('submit', (e) => {
+		e.preventDefault();
+		const email = emailInput.value;
+		console.log('Subscribe:', email);
+		emailInput.value = '';
+		form.style.display = 'none';
+		toggle.textContent = 'Subscribed!';
+		toggle.style.display = 'inline-block';
+		toggle.disabled = true;
+	});
+</script>
 
 <style>
 	.sidebar {
 		width: 260px;
-		min-height: 100vh;
-		padding: 2rem 1.5rem;
+		height: 100vh;
+		padding: 2rem 1.5rem 0;
 		background-color: var(--bg-sidebar);
-		border-right: 1px solid var(--border);
+		border-right: 1px dashed var(--border);
 		position: fixed;
 		top: 0;
 		left: 0;
 		overflow-y: auto;
 		transition: background-color 0.2s ease, border-color 0.2s ease;
+		display: flex;
+		flex-direction: column;
+		z-index: 101;
 	}
 
-	.site-title {
+	.sidebar-top {
+		flex: 1;
+	}
+
+	.sidebar-bottom {
+		padding: 0.75rem 0;
+	}
+
+	.subscribe-btn {
+		font-family: var(--font-body);
+		font-size: 0.85rem;
+		padding: 0.4rem 1rem;
+		border: none;
+		border-radius: 0.375rem;
+		cursor: pointer;
+		background-color: #1a1a1a;
+		color: #ffffff;
+		transition: background-color 0.15s ease;
+	}
+
+	.subscribe-btn:hover:not(:disabled) {
+		background-color: #333;
+	}
+
+	.subscribe-btn:disabled {
+		opacity: 0.7;
+		cursor: default;
+	}
+
+	:global([data-theme='dark']) .subscribe-btn {
+		background-color: #e0e0e0;
+		color: #1a1a1a;
+	}
+
+	:global([data-theme='dark']) .subscribe-btn:hover:not(:disabled) {
+		background-color: #cccccc;
+	}
+
+	.subscribe-form {
+		display: none;
+		flex-direction: column;
+		gap: 0.5rem;
+	}
+
+	.subscribe-form input[type="email"] {
+		font-family: var(--font-body);
+		font-size: 0.85rem;
+		padding: 0.4rem 0.75rem;
+		border: 1px solid var(--border);
+		border-radius: 0.375rem;
+		background-color: var(--bg-sidebar);
+		color: var(--text);
+		outline: none;
+		width: 100%;
+		transition: border-color 0.15s ease;
+	}
+
+	.subscribe-form input[type="email"]:focus {
+		border-color: var(--accent);
+	}
+
+	.subscribe-actions {
+		display: flex;
+		gap: 0.5rem;
+		align-items: center;
+	}
+
+	.subscribe-submit {
+		font-family: var(--font-body);
+		font-size: 0.85rem;
+		padding: 0.4rem 1rem;
+		border: none;
+		border-radius: 0.375rem;
+		cursor: pointer;
+		background-color: #1a1a1a;
+		color: #ffffff;
+		transition: background-color 0.15s ease;
+	}
+
+	.subscribe-submit:hover {
+		background-color: #333;
+	}
+
+	:global([data-theme='dark']) .subscribe-submit {
+		background-color: #e0e0e0;
+		color: #1a1a1a;
+	}
+
+	:global([data-theme='dark']) .subscribe-submit:hover {
+		background-color: #cccccc;
+	}
+
+	.subscribe-cancel {
+		font-family: var(--font-body);
+		font-size: 1.1rem;
+		padding: 0.2rem 0.5rem;
+		border: none;
+		border-radius: 0.375rem;
+		cursor: pointer;
+		background: none;
+		color: var(--text-muted);
+		line-height: 1;
+	}
+
+	.subscribe-cancel:hover {
+		color: var(--text);
+	}
+
+.site-title {
 		font-family: var(--font-heading);
 		font-size: 1.25rem;
-		font-weight: 600;
+		font-weight: 459;
 		color: var(--text);
 		display: block;
 		margin-bottom: 2rem;
