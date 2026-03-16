@@ -1,0 +1,38 @@
+---
+import Layout from '../layouts/Layout.astro';
+import ThemeToggle from '../components/ThemeToggle.astro';
+import Sidebar from '../components/Sidebar.astro';
+import MainContent from '../components/MainContent.astro';
+---
+
+<Layout>
+	<ThemeToggle />
+	<div class="page-layout">
+		<Sidebar />
+		<div class="content-area">
+			<MainContent />
+		</div>
+	</div>
+</Layout>
+
+<style>
+	.page-layout {
+		display: flex;
+		min-height: 100vh;
+	}
+
+	.content-area {
+		flex: 1;
+		margin-left: 260px;
+	}
+
+	@media (max-width: 768px) {
+		.page-layout {
+			flex-direction: column;
+		}
+
+		.content-area {
+			margin-left: 0;
+		}
+	}
+</style>
