@@ -1,0 +1,96 @@
+---
+import { getCollection, render } from 'astro:content';
+import Layout from '../../layouts/Layout.astro';
+import ThemeToggle from '../../components/ThemeToggle.astro';
+
+export async function getStaticPaths() {
+	const posts = await getCollection('posts');
+	return posts.map((post) => ({
+		params: { slug: post.id },
+		props: { post },
+	}));
+}
+
+const { post } = Astro.props;
+const { Content } = await render(post);
+---
+
+<Layout title={post.data.title}>
+	<ThemeToggle />
+	<article class="post">
+		<a href="/" class="back-link">&larr; Back</a>
+		<header>
+			<h1>{post.data.title}</h1>
+			<time class="post-date">{new Date(post.data.date).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</time>
+		</header>
+		<div class="post-body">
+			<Content />
+		</div>
+	</article>
+</Layout>
+
+<style>
+	.post {
+		max-width: 640px;
+		margin: 0 auto;
+		padding: 3rem 2rem;
+	}
+
+	.back-link {
+		display: inline-block;
+		margin-bottom: 2rem;
+		font-size: 0.9rem;
+		color: var(--text-muted);
+	}
+
+	.back-link:hover {
+		color: var(--accent);
+	}
+
+	h1 {
+		font-family: var(--font-heading);
+		font-size: 2rem;
+		font-weight: 600;
+		margin: 0 0 0.5rem 0;
+		color: var(--text);
+	}
+
+	.post-date {
+		display: block;
+		font-size: 0.88rem;
+		color: var(--text-muted);
+		margin-bottom: 2rem;
+	}
+
+	.post-body {
+		font-size: 1.05rem;
+		line-height: 1.75;
+		color: var(--text);
+	}
+
+	.post-body :global(h2) {
+		font-family: var(--font-heading);
+		font-size: 1.4rem;
+		font-weight: 600;
+		margin: 2rem 0 1rem 0;
+		color: var(--text);
+	}
+
+	.post-body :global(p) {
+		margin: 0 0 1.25rem 0;
+	}
+
+	.post-body :global(strong) {
+		font-weight: 600;
+	}
+
+	@media (max-width: 768px) {
+		.post {
+			padding: 2rem 1.5rem;
+		}
+
+		h1 {
+			font-size: 1.6rem;
+		}
+	}
+</style>
