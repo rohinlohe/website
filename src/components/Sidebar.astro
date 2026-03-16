@@ -13,7 +13,7 @@ const sortedPosts = posts.sort((a, b) => new Date(b.data.date).getTime() - new D
 <aside class="sidebar">
 	<div class="sidebar-top">
 		<div class="sidebar-header">
-			<a href="/" class="site-title">Rohin Lohe</a>
+			<a href="/" class="site-title">posts</a>
 		</div>
 		<nav class="feed">
 			<ul>
@@ -31,10 +31,9 @@ const sortedPosts = posts.sort((a, b) => new Date(b.data.date).getTime() - new D
 	<div class="sidebar-bottom">
 		<button class="subscribe-btn" id="subscribe-toggle">Subscribe</button>
 		<form class="subscribe-form" id="subscribe-form">
-			<input type="email" placeholder="your email" required id="subscribe-email" />
-			<div class="subscribe-actions">
-				<button type="submit" class="subscribe-submit">Go</button>
-				<button type="button" class="subscribe-cancel" id="subscribe-cancel">&times;</button>
+			<div class="subscribe-input-row">
+				<input type="email" placeholder="your email" required id="subscribe-email" />
+				<button type="submit" class="subscribe-submit" aria-label="Submit">&rarr;</button>
 			</div>
 		</form>
 	</div>
@@ -43,18 +42,12 @@ const sortedPosts = posts.sort((a, b) => new Date(b.data.date).getTime() - new D
 <script>
 	const toggle = document.getElementById('subscribe-toggle')!;
 	const form = document.getElementById('subscribe-form')!;
-	const cancel = document.getElementById('subscribe-cancel')!;
 	const emailInput = document.getElementById('subscribe-email')! as HTMLInputElement;
 
 	toggle.addEventListener('click', () => {
 		toggle.style.display = 'none';
 		form.style.display = 'flex';
 		emailInput.focus();
-	});
-
-	cancel.addEventListener('click', () => {
-		form.style.display = 'none';
-		toggle.style.display = 'inline-block';
 	});
 
 	form.addEventListener('submit', (e) => {
@@ -95,7 +88,11 @@ const sortedPosts = posts.sort((a, b) => new Date(b.data.date).getTime() - new D
 	}
 
 	.sidebar-bottom {
-		padding: 1.5rem 0;
+		height: 4.5rem;
+		display: flex;
+		align-items: center;
+		flex-shrink: 0;
+		padding-left: 0.6rem;
 	}
 
 	.subscribe-btn {
@@ -132,6 +129,7 @@ const sortedPosts = posts.sort((a, b) => new Date(b.data.date).getTime() - new D
 		display: none;
 		flex-direction: column;
 		gap: 0.5rem;
+		width: 100%;
 	}
 
 	.subscribe-form input[type="email"] {
@@ -151,60 +149,43 @@ const sortedPosts = posts.sort((a, b) => new Date(b.data.date).getTime() - new D
 		border-color: var(--accent);
 	}
 
-	.subscribe-actions {
+	.subscribe-input-row {
 		display: flex;
-		gap: 0.5rem;
 		align-items: center;
+		gap: 0.5rem;
+		width: 100%;
+	}
+
+	.subscribe-input-row input[type="email"] {
+		flex: 1;
+		min-width: 0;
 	}
 
 	.subscribe-submit {
-		font-family: var(--font-body);
-		font-size: 0.85rem;
-		padding: 0.4rem 1rem;
+		font-size: 1.2rem;
+		padding: 0;
 		border: none;
-		border-radius: 0.375rem;
 		cursor: pointer;
-		background-color: #1a1a1a;
-		color: #ffffff;
-		transition: background-color 0.15s ease;
+		background: none;
+		color: var(--text);
+		line-height: 1;
+		transition: color 0.15s ease, transform 0.15s ease;
+		flex-shrink: 0;
 	}
 
 	.subscribe-submit:hover {
-		background-color: #333;
+		color: var(--accent);
+		transform: translateX(2px);
 	}
 
-	:global([data-theme='dark']) .subscribe-submit {
-		background-color: #e0e0e0;
-		color: #1a1a1a;
-	}
-
-	:global([data-theme='dark']) .subscribe-submit:hover {
-		background-color: #cccccc;
-	}
-
-	.subscribe-cancel {
-		font-family: var(--font-body);
-		font-size: 1.1rem;
-		padding: 0.2rem 0.5rem;
-		border: none;
-		border-radius: 0.375rem;
-		cursor: pointer;
-		background: none;
-		color: var(--text-muted);
-		line-height: 1;
-	}
-
-	.subscribe-cancel:hover {
-		color: var(--text);
-	}
-
-.site-title {
+	.site-title {
 		font-family: var(--font-heading);
 		font-size: 1.25rem;
 		font-weight: 459;
 		color: var(--text);
 		display: block;
-		margin-bottom: 2rem;
+		margin-bottom: 1rem;
+		padding-left: 0.6rem;
 	}
 
 	.site-title:hover {
