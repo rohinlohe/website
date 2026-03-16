@@ -2,6 +2,7 @@
 import { getCollection, render } from 'astro:content';
 import Layout from '../../layouts/Layout.astro';
 import ThemeToggle from '../../components/ThemeToggle.astro';
+import Sidebar from '../../components/Sidebar.astro';
 
 export async function getStaticPaths() {
 	const posts = await getCollection('posts');
@@ -17,34 +18,37 @@ const { Content } = await render(post);
 
 <Layout title={post.data.title}>
 	<ThemeToggle />
-	<article class="post">
-		<a href="/" class="back-link">&larr; Back</a>
-		<header>
-			<h1>{post.data.title}</h1>
-			<time class="post-date">{new Date(post.data.date).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</time>
-		</header>
-		<div class="post-body">
-			<Content />
+	<div class="page-layout">
+		<Sidebar currentSlug={post.id} />
+		<div class="content-area">
+			<article class="post">
+				<header>
+					<h1>{post.data.title}</h1>
+					<time class="post-date">{new Date(post.data.date).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</time>
+				</header>
+				<div class="post-body">
+					<Content />
+				</div>
+			</article>
 		</div>
-	</article>
+	</div>
 </Layout>
 
 <style>
+	.page-layout {
+		display: flex;
+		min-height: 100vh;
+	}
+
+	.content-area {
+		flex: 1;
+		margin-left: 260px;
+	}
+
 	.post {
 		max-width: 640px;
 		margin: 0 auto;
 		padding: 3rem 2rem;
-	}
-
-	.back-link {
-		display: inline-block;
-		margin-bottom: 2rem;
-		font-size: 0.9rem;
-		color: var(--text-muted);
-	}
-
-	.back-link:hover {
-		color: var(--accent);
 	}
 
 	h1 {
@@ -85,6 +89,14 @@ const { Content } = await render(post);
 	}
 
 	@media (max-width: 768px) {
+		.page-layout {
+			flex-direction: column;
+		}
+
+		.content-area {
+			margin-left: 0;
+		}
+
 		.post {
 			padding: 2rem 1.5rem;
 		}

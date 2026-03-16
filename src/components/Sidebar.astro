@@ -1,6 +1,11 @@
 ---
 import { getCollection } from 'astro:content';
 
+interface Props {
+	currentSlug?: string;
+}
+
+const { currentSlug } = Astro.props;
 const posts = await getCollection('posts');
 const sortedPosts = posts.sort((a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime());
 ---
@@ -13,7 +18,7 @@ const sortedPosts = posts.sort((a, b) => new Date(b.data.date).getTime() - new D
 		<ul>
 			{sortedPosts.map((post) => (
 				<li>
-					<a href={`/posts/${post.id}`}>
+					<a href={`/posts/${post.id}`} class:list={[{ active: post.id === currentSlug }]}>
 						<span class="entry-title">{post.data.title}</span>
 						<span class="entry-date">{new Date(post.data.date).toLocaleDateString('en-US', { year: 'numeric', month: 'short' })}</span>
 					</a>
@@ -63,14 +68,23 @@ const sortedPosts = posts.sort((a, b) => new Date(b.data.date).getTime() - new D
 	.feed li a {
 		display: flex;
 		flex-direction: column;
-		padding: 0.5rem 0;
+		padding: 0.5rem 0.6rem;
 		color: var(--text);
-		border-radius: 0.25rem;
-		transition: color 0.15s ease;
+		border-radius: 0.375rem;
+		transition: color 0.15s ease, background-color 0.15s ease;
 	}
 
 	.feed li a:hover {
 		color: var(--accent);
+	}
+
+	.feed li a.active {
+		background-color: rgba(176, 125, 79, 0.12);
+		color: var(--accent);
+	}
+
+	:global([data-theme='dark']) .feed li a.active {
+		background-color: rgba(212, 165, 116, 0.12);
 	}
 
 	.entry-title {
